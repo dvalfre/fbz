@@ -1,0 +1,11 @@
+#!/bin/bash
+
+statsfile="${1}"
+iterations="${2}"
+port="${3}"
+phrase="now is the time for all good men to come to the aid of their country"
+
+for i in $(seq 1 $iterations)
+do
+  /bin/time -f '%e' -a -o "${statsfile}" curl -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -d "{\"text\" : \"${phrase}\"}" http://localhost:${port}/analyze >/dev/null 2>&1
+done
