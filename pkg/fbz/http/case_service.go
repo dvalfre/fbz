@@ -111,6 +111,40 @@ func (s *CaseService) Update(caseID int, message string) (*fbz.Case, error) {
 	return s.Get(caseID)
 }
 
+func (s *CaseService) Create(projectName string, areaName string, title string, category string, message string) (*fbz.Case, error) {
+	cmd, err := json.Marshal(
+		&createCmd{
+			Cmd:      "new",
+			Project:  projectName,
+			Area:     areaName,
+			Category: category,
+			Title:    title,
+			Message:  message,
+			Token:    s.driver.Token(),
+		},
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("could not build api command")
+	}
+
+	fmt.Println("DEBUG:", string(cmd))
+
+	r := s.driver.Post("/f/api/0/jsonapi", nil, []byte(cmd))
+	if !r.Okay() {
+		return nil, fmt.Errorf("the api reported an error")
+	}
+
+	wrapper := &singleCaseWrapper{}
+
+	err = json.Unmarshal(r.Data, &wrapper)
+	if err != nil {
+		return nil, fmt.Errorf("could not decode api response")
+	}
+
+	return s.Get(wrapper.Data.Case.ID)
+}
+
 func (s *CaseService) Resolve(caseID int, reject bool, message string) (*fbz.Case, error) {
 	c, err := s.Get(caseID)
 	if err != nil {
@@ -160,6 +194,16 @@ type updateCmd struct {
 	Token   string `json:"token"`
 }
 
+type createCmd struct {
+	Cmd      string `json:"cmd"`
+	Title    string `json:"sTitle"`
+	Message  string `json:"sEvent"`
+	Category string `json:"sCategory"`
+	Project  string `json:"sProject"`
+	Area     string `json:"sArea"`
+	Token    string `json:"token"`
+}
+
 type resolveCmd struct {
 	Cmd     string `json:"cmd"`
 	CaseID  int    `json:"ixBug"`
@@ -172,8 +216,16 @@ type caseWrapper struct {
 	Data *caseDetailsData `json:"data"`
 }
 
+type singleCaseWrapper struct {
+	Data *singleCaseDetailsData `json:"data"`
+}
+
 type caseDetailsData struct {
 	Cases []*fbz.Case `json:"cases"`
+}
+
+type singleCaseDetailsData struct {
+	Case *fbz.Case `json:"case"`
 }
 
 func resolutionText(category string, reject bool) string {
