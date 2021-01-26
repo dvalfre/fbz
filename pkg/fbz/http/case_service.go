@@ -15,14 +15,23 @@ func NewCaseService(driver fbz.Driver) *CaseService {
 	return &CaseService{driver: driver}
 }
 
-func (s *CaseService) All(query string) []*fbz.Case {
-	cols := []string{"sTitle", "sProject", "sArea", "sStatus", "dblStoryPts", "sPriority"}
+var caseCols = []string{
+	"sTitle",
+	"sProject",
+	"sArea",
+	"sStatus",
+	"dblStoryPts",
+	"sPriority",
+	"sCategory",
+	"events",
+}
 
+func (s *CaseService) All(query string) []*fbz.Case {
 	cmd, err := json.Marshal(
 		&searchCmd{
 			Cmd:   "search",
 			Q:     query,
-			Cols:  cols,
+			Cols:  caseCols,
 			Token: s.driver.Token(),
 		},
 	)
@@ -42,13 +51,11 @@ func (s *CaseService) All(query string) []*fbz.Case {
 }
 
 func (s *CaseService) Get(caseID int) (*fbz.Case, error) {
-	cols := []string{"sTitle", "sStatus", "events"}
-
 	cmd, err := json.Marshal(
 		&getCmd{
 			Cmd:   "search",
 			Q:     caseID,
-			Cols:  cols,
+			Cols:  caseCols,
 			Token: s.driver.Token(),
 		},
 	)
@@ -171,17 +178,6 @@ type caseDetailsData struct {
 
 func resolutionText(category string, reject bool) string {
 	if !reject {
-		switch category {
-		case "Task":
-			return "Resolved (Implemented)"
-		case "Bug":
-			return "Resolved (Fixed)"
-		case "Feature":
-			return "Resolved (Completed)"
-		case "Inquiry":
-			return "Resolved (Responded)"
-		}
-
 		return "Resolved"
 	}
 
