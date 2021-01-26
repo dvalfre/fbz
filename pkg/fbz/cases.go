@@ -2,6 +2,7 @@ package fbz
 
 type Case struct {
 	ID          int      `json:"ixBug"`
+	Category    string   `json:"sCategory"`
 	Title       string   `json:"sTitle"`
 	Status      string   `json:"sStatus"`
 	Priority    string   `json:"sPriority"`
@@ -31,4 +32,5 @@ type CaseService interface {
 	All(map[string]string) []*Case
 	Get(int) (*Case, error)
 	Update(int, string) (*Case, error)
+	Resolve(int, bool, string) (*Case, error)
 }
