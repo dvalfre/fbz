@@ -1,0 +1,4 @@
+#!/bin/bash
+
+phrase="$1"
+curl -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -d "{\"text\" : \"${phrase}\"}" http://localhost:8675/analyze 2>/dev/null| jq .
