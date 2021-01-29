@@ -7,6 +7,8 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/ess/fbz/pkg/fbz/http"
+
+	"github.com/ess/fbz/cmd/fbz/presenters"
 )
 
 var listQuery string
@@ -53,16 +55,7 @@ This should be listed as url: in ~/.fbz.yml`,
 
 		cases := http.NewCaseService(d)
 
-		for _, c := range cases.All(listQuery) {
-			fmt.Printf(
-				"%d - (%s) - %d pts - [%s] - %s\n",
-				c.ID,
-				c.Priority,
-				c.Points,
-				c.Status,
-				c.Title,
-			)
-		}
+		presenters.PrintCaseList(cases.All(listQuery))
 
 		return nil
 	},

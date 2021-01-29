@@ -34,4 +34,5 @@ type CaseService interface {
 	Update(int, string) (*Case, error)
 	Resolve(int, bool, string) (*Case, error)
 	Create(string, string, string, string, string) (*Case, error)
+	Estimate(int, int) (*Case, error)
 }

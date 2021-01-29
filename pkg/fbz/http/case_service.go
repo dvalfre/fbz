@@ -173,6 +173,33 @@ func (s *CaseService) Resolve(caseID int, reject bool, message string) (*fbz.Cas
 	return s.Get(caseID)
 }
 
+func (s *CaseService) Estimate(caseID int, points int) (*fbz.Case, error) {
+	c, err := s.Get(caseID)
+	if err != nil {
+		return nil, err
+	}
+
+	cmd, err := json.Marshal(
+		&estimateCmd{
+			Cmd:    "edit",
+			CaseID: c.ID,
+			Points: points,
+			Token:  s.driver.Token(),
+		},
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("could not build api command")
+	}
+
+	r := s.driver.Post("/f/api/0/jsonapi", nil, []byte(cmd))
+	if !r.Okay() {
+		return nil, fmt.Errorf("the api reported an error")
+	}
+
+	return s.Get(caseID)
+}
+
 type searchCmd struct {
 	Cmd   string   `json:"cmd"`
 	Q     string   `json:"q"`
@@ -192,6 +219,13 @@ type updateCmd struct {
 	CaseID  int    `json:"ixBug"`
 	Message string `json:"sEvent"`
 	Token   string `json:"token"`
+}
+
+type estimateCmd struct {
+	Cmd    string `json:"cmd"`
+	CaseID int    `json:"ixBug"`
+	Points int    `json:"dblStoryPts"`
+	Token  string `json:"token"`
 }
 
 type createCmd struct {
