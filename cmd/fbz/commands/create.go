@@ -8,6 +8,8 @@ import (
 
 	//"github.com/ess/fbz/pkg/fbz"
 	"github.com/ess/fbz/pkg/fbz/http"
+
+	"github.com/ess/fbz/cmd/fbz/presenters"
 )
 
 var caseCategory string
@@ -89,17 +91,7 @@ This should be listed as url: in ~/.fbz.yml`,
 			return err
 		}
 
-		fmt.Printf("(%d) %s\n", c.ID, c.Title)
-
-		for _, event := range c.Events {
-			fmt.Printf("\nWhen: %s\nWho: %s\nWhat: %s\n", event.CreatedAt, event.Creator, event.Description)
-
-			if len(event.Text) > 0 {
-				fmt.Printf("\n%s\n", event.Text)
-			} else {
-				fmt.Println("\n<no message>")
-			}
-		}
+		presenters.PrintCaseDetails(c)
 
 		return nil
 	},

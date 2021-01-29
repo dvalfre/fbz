@@ -13,18 +13,18 @@ import (
 	"github.com/ess/fbz/cmd/fbz/presenters"
 )
 
-var showCmd = &cobra.Command{
-	Use: "show <Case ID>",
+var estimateCmd = &cobra.Command{
+	Use: "estimate <Case ID> <Story Points>",
 
-	Short: "Show details of a case",
+	Short: "Estimate story points for a case",
 
-	Long: `Show details of a case
+	Long: `Estimate story points for a case
 
-Given a case ID, show the information for the case and its various events.`,
+Given a case ID and a number of story points, update the case with said points.`,
 
 	PreRunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) != 1 {
-			return fmt.Errorf("Usage: fbz show <Case ID>")
+		if len(args) != 2 {
+			return fmt.Errorf("Usage: fbz estimate <Case ID> <Story Points>")
 		}
 
 		if len(viper.GetString("token")) == 0 {
@@ -64,7 +64,12 @@ This should be listed as url: in ~/.fbz.yml`,
 			return err
 		}
 
-		c, err := cases.Get(caseID)
+		points, err := strconv.Atoi(args[1])
+		if err != nil {
+			return err
+		}
+
+		c, err := cases.Estimate(caseID, points)
 		if err != nil {
 			return err
 		}
@@ -79,5 +84,5 @@ This should be listed as url: in ~/.fbz.yml`,
 }
 
 func init() {
-	RootCmd.AddCommand(showCmd)
+	RootCmd.AddCommand(estimateCmd)
 }

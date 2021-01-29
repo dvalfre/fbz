@@ -47,19 +47,14 @@ test:
 	./scripts/blanket
 
 linux:
-	#CGO_ENABLED=0 GOOS=linux GOARCH=386 go build ${LDFLAGS} -o ${TARGET}/${BINARY}-${VERSION}-linux-386 ${PACKAGE}
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ${TARGET}/${BINARY}-${VERSION}-linux-amd64 ${PACKAGE}
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm go build ${LDFLAGS} -o ${TARGET}/${BUNARY}-${VERSION}-linux-arm ${PACKAGE}
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm go build ${LDFLAGS} -o ${TARGET}/${BINARY}-${VERSION}-linux-arm ${PACKAGE}
 
 darwin:
-	#CGO_ENABLED=0 GOOS=darwin GOARCH=386 go build ${LDFLAGS} -o ${TARGET}/${BINARY}-${VERSION}-darwin-386 ${PACKAGE}
 	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ${TARGET}/${BINARY}-${VERSION}-darwin-amd64 ${PACKAGE}
-	#CGO_ENABLED=0 GOOS=darwin GOARCH=arm go build ${LDFLAGS} -o ${TARGET}/${BINARY}-${VERSION}-darwin-arm ${PACKAGE}
 	
 windows:
-	#CGO_ENABLED=0 GOOS=windows GOARCH=386 go build ${LDFLAGS} -o ${TARGET}/${BINARY}-${VERSION}-windows-386.exe ${PACKAGE}
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ${TARGET}/${BINARY}-${VERSION}-windows-amd64.exe ${PACKAGE}
 
 freebsd:
-	#CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build ${LDFLAGS} -o ${TARGET}/${BINARY}-${VERSION}-freebsd-386 ${PACKAGE}
 	CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build ${LDFLAGS} -o ${TARGET}/${BINARY}-${VERSION}-freebsd-amd64 ${PACKAGE}
