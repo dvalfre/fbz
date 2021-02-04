@@ -7,6 +7,7 @@ type Case struct {
 	Status      string   `json:"sStatus"`
 	Priority    string   `json:"sPriority"`
 	Points      int      `json:"dblStoryPts"`
+	Assignee    string   `json:"sPersonAssignedTo"`
 	ProjectName string   `json:"sProject"`
 	AreaName    string   `json:"sArea"`
 	Events      []*Event `json:"events"`
@@ -35,4 +36,5 @@ type CaseService interface {
 	Resolve(int, bool, string) (*Case, error)
 	Create(string, string, string, string, string) (*Case, error)
 	Estimate(int, int) (*Case, error)
+	Assign(int, string) (*Case, error)
 }
