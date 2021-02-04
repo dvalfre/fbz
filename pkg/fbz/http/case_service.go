@@ -23,6 +23,7 @@ var caseCols = []string{
 	"dblStoryPts",
 	"sPriority",
 	"sCategory",
+	"sPersonAssignedTo",
 	"events",
 }
 
@@ -200,6 +201,33 @@ func (s *CaseService) Estimate(caseID int, points int) (*fbz.Case, error) {
 	return s.Get(caseID)
 }
 
+func (s *CaseService) Assign(caseID int, person string) (*fbz.Case, error) {
+	c, err := s.Get(caseID)
+	if err != nil {
+		return nil, err
+	}
+
+	cmd, err := json.Marshal(
+		&assignCmd{
+			Cmd:    "assign",
+			CaseID: c.ID,
+			Person: person,
+			Token:  s.driver.Token(),
+		},
+	)
+
+	if err != nil {
+		return nil, fmt.Errorf("could not build api command")
+	}
+
+	r := s.driver.Post("/f/api/0/jsonapi", nil, []byte(cmd))
+	if !r.Okay() {
+		return nil, fmt.Errorf("the api reported an error")
+	}
+
+	return s.Get(caseID)
+}
+
 type searchCmd struct {
 	Cmd   string   `json:"cmd"`
 	Q     string   `json:"q"`
@@ -244,6 +272,13 @@ type resolveCmd struct {
 	Message string `json:"sEvent"`
 	Status  string `json:"sStatus"`
 	Token   string `json:"token"`
+}
+
+type assignCmd struct {
+	Cmd    string `json:"cmd"`
+	CaseID int    `json:"ixBug"`
+	Person string `json:"sPersonAssignedTo"`
+	Token  string `json:"token"`
 }
 
 type caseWrapper struct {
