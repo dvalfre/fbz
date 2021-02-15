@@ -67,7 +67,6 @@ func (driver *Driver) rawRequest(verb string, path string, params url.Values, da
 	defer response.Body.Close()
 
 	if response.StatusCode > 299 {
-		fmt.Println("DEBUG - Got the following HTTP status:", response.StatusCode)
 		return nil, nil,
 			fmt.Errorf(
 				"The upstream API returned the following status: %d",
