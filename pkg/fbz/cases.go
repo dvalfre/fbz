@@ -38,4 +38,5 @@ type CaseService interface {
 	Estimate(int, int) (*Case, error)
 	Assign(int, string) (*Case, error)
 	Start(int) (*Case, error)
+	Accept(int, string) (*Case, error)
 }
