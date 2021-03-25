@@ -17,10 +17,10 @@ func (s *CaseService) All(query string) []*fbz.Case {
 	)
 
 	if err == nil {
-		r := s.driver.Post("/f/api/0/jsonapi", nil, []byte(cmd))
+		r := s.driver.Post("/f/api/0/jsonapi", []byte(cmd))
 		if r.Okay() {
 			wrapper := caseWrapper{}
-			jErr := json.Unmarshal(r.Data, &wrapper)
+			jErr := json.Unmarshal(r.Data(), &wrapper)
 			if jErr == nil {
 				return wrapper.Data.Cases
 			}

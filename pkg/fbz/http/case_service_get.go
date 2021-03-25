@@ -21,14 +21,14 @@ func (s *CaseService) Get(caseID int) (*fbz.Case, error) {
 		return nil, fmt.Errorf("could not build api command")
 	}
 
-	r := s.driver.Post("/f/api/0/jsonapi", nil, []byte(cmd))
+	r := s.driver.Post("/f/api/0/jsonapi", []byte(cmd))
 	if !r.Okay() {
 		return nil, fmt.Errorf("ticket not found")
 	}
 
 	wrapper := caseWrapper{}
 
-	err = json.Unmarshal(r.Data, &wrapper)
+	err = json.Unmarshal(r.Data(), &wrapper)
 	if err != nil {
 		return nil, fmt.Errorf("could not decode server response")
 	}

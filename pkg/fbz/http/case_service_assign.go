@@ -26,7 +26,7 @@ func (s *CaseService) Assign(caseID int, person string) (*fbz.Case, error) {
 		return nil, fmt.Errorf("could not build api command")
 	}
 
-	r := s.driver.Post("/f/api/0/jsonapi", nil, []byte(cmd))
+	r := s.driver.Post("/f/api/0/jsonapi", []byte(cmd))
 	if !r.Okay() {
 		return nil, fmt.Errorf("the api reported an error")
 	}

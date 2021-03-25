@@ -27,7 +27,7 @@ func (s *CaseService) Resolve(caseID int, reject bool, message string) (*fbz.Cas
 		return nil, fmt.Errorf("could not build api command")
 	}
 
-	r := s.driver.Post("/f/api/0/jsonapi", nil, []byte(cmd))
+	r := s.driver.Post("/f/api/0/jsonapi", []byte(cmd))
 	if !r.Okay() {
 		return nil, fmt.Errorf("the api reported an error")
 	}
