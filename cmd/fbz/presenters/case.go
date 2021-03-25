@@ -26,13 +26,15 @@ func PrintCaseDetails(c *fbz.Case) {
 
 func PrintCaseList(cases []*fbz.Case) {
 	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 3, ' ', uint(0))
-	fmt.Fprintln(writer, "Case ID\tPriority\tAssignee\tEstimate\tStatus\tTitle")
-	fmt.Fprintln(writer, "=======\t========\t========\t========\t======\t=====")
+	fmt.Fprintln(writer, "Case ID\tProject\tArea\tPriority\tAssignee\tEstimate\tStatus\tTitle")
+	fmt.Fprintln(writer, "=======\t=======\t====\t========\t========\t========\t======\t=====")
 	for _, c := range cases {
 		fmt.Fprintf(
 			writer,
-			"%d\t%s\t%s\t%d pts\t%s\t%s\n",
+			"%d\t%s\t%s\t%s\t%s\t%d pts\t%s\t%s\n",
 			c.ID,
+			c.ProjectName,
+			c.AreaName,
 			c.Priority,
 			c.Assignee,
 			c.Points,

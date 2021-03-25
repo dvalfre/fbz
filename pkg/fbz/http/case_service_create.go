@@ -24,16 +24,14 @@ func (s *CaseService) Create(projectName string, areaName string, title string, 
 		return nil, fmt.Errorf("could not build api command")
 	}
 
-	fmt.Println("DEBUG:", string(cmd))
-
-	r := s.driver.Post("/f/api/0/jsonapi", nil, []byte(cmd))
+	r := s.driver.Post("/f/api/0/jsonapi", []byte(cmd))
 	if !r.Okay() {
 		return nil, fmt.Errorf("the api reported an error")
 	}
 
 	wrapper := &singleCaseWrapper{}
 
-	err = json.Unmarshal(r.Data, &wrapper)
+	err = json.Unmarshal(r.Data(), &wrapper)
 	if err != nil {
 		return nil, fmt.Errorf("could not decode api response")
 	}
