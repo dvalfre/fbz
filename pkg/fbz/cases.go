@@ -10,6 +10,7 @@ type Case struct {
 	Assignee    string   `json:"sPersonAssignedTo"`
 	ProjectName string   `json:"sProject"`
 	AreaName    string   `json:"sArea"`
+	ParentID    int      `json:"ixBugParent"`
 	Events      []*Event `json:"events"`
 }
 

@@ -21,6 +21,7 @@ var caseCols = []string{
 	"sPriority",
 	"sCategory",
 	"sPersonAssignedTo",
+	"ixBugParent",
 	"events",
 }
 
